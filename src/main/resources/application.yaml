@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/blade_calculator
+    username: woong
+    password: Jhan00254!
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  thymeleaf:
+    cache: false
+    check-template-location: true
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+server:
+  port: 8081
