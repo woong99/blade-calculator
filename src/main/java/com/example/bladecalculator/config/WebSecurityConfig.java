@@ -1,7 +1,6 @@
 package com.example.bladecalculator.config;
 
 import com.example.bladecalculator.auth.oauth.PrincipalOAuth2UserService;
-import com.example.bladecalculator.entity.Authority;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -32,11 +31,11 @@ public class WebSecurityConfig {
                 .securityMatcher("/**")
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers("/vendor/**", "/css/**", "/js/**",
-                                "/img/**", "/login", "/logout").permitAll()
+                                "/img/**", "/login", "/logout", "/", "/calculator/**").permitAll()
                 )
-                .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/", "/calculator/**").hasAuthority(Authority.USER.getAuthority())
-                )
+//                .authorizeHttpRequests(
+//                        auth -> auth.requestMatchers("/", "/calculator/**").hasAuthority(Authority.USER.getAuthority())
+//                )
                 .logout()
                 .logoutUrl("/logout")
                 .addLogoutHandler(((request, response, authentication) -> {
