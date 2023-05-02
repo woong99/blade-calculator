@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/defaultLayout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/css/login.css" rel="stylesheet">
+    <script>
+        function goSignUp() {
+            location.href = '/owner/signUp';
+        }
+
+        function onLogin() {
+            $("#frm").attr("action", "/owner/login.do");
+            $("#frm").submit();
+        }
+    </script>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-lg-4 col-md-6 col-sm-8 col-10">
+                <div class="form-wrapper">
+                    <h1 class="text-center mb-4">Owner Login Form</h1>
+                    <form id="frm" method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="userId">아이디</label>
+                            <input aria-describedby="idHelp" class="form-control" id="userId" name="userId" type="text">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="userPwd">비밀번호</label>
+                            <input class="form-control" id="userPwd" name="userPwd" type="password">
+                        </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="btn btn-primary" onclick="onLogin()" type="button">로그인</button>
+                        </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="btn btn-primary" onclick="goSignUp()" type="button">회원가입</button>
+                        </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="btn btn-primary" onclick="location.href='/oauth2/authorization/naver'"
+                                    type="button">
+                                네이버 로그인
+                            </button>
+                        </div>
+                        <div class="text-center">
+                            <a href="#">Forgot password?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
