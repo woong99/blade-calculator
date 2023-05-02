@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="commonHead">
+    <meta charset="UTF-8">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <meta name="title" th:content="${metaTitle}">
+    <title th:text="${metaTitle}"></title>
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="/js/jquery/jquery-3.6.4.min.js"></script>
+    <script src="/js/utils.js"></script>
+    <link href="/vendor/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+</th:block>
+</html>
