@@ -74,4 +74,33 @@ public class CalculatorController {
         model.addAttribute("returnUrl", "/calculator/hp");
         return "/views/common/message";
     }
+
+    @RequestMapping("/defense")
+    public String defense(@AuthUser User user, ModelMap model) {
+        Map<String, Object> statMap = calculatorService.getStats(user, StatType.DEF);
+
+        model.addAttribute("stats", statMap.get("stats"));
+        model.addAttribute("command", statMap.get("command"));
+        return "/views/user/calculator/defense";
+    }
+
+    @RequestMapping("/defense/insert.do")
+    public String defenseInsert(@AuthUser User user, UserStatListVO userStatListVO, ModelMap model) {
+        calculatorService.insertStats(userStatListVO, user);
+
+        model.addAttribute("type", "msg+url");
+        model.addAttribute("message", "저장이 완료되었습니다.");
+        model.addAttribute("returnUrl", "/calculator/defense");
+        return "/views/common/message";
+    }
+
+    @RequestMapping("/defense/update.do")
+    public String defenseUpdate(@AuthUser User user, UserStatListVO userStatListVO, ModelMap model) {
+        calculatorService.updateStats(userStatListVO, user);
+
+        model.addAttribute("type", "msg+url");
+        model.addAttribute("message", "저징이 완료되었습니다.");
+        model.addAttribute("returnUrl", "/calculator/defense");
+        return "/views/common/message";
+    }
 }
