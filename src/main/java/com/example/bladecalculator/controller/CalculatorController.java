@@ -75,6 +75,14 @@ public class CalculatorController {
         return "/views/common/message";
     }
 
+
+    /**
+     * 계산기 > 방어력
+     *
+     * @param user  유저 정보
+     * @param model 모델
+     * @return "/views/user/calculator/defense"
+     */
     @RequestMapping("/defense")
     public String defense(@AuthUser User user, ModelMap model) {
         Map<String, Object> statMap = calculatorService.getStats(user, StatType.DEF);
@@ -84,6 +92,15 @@ public class CalculatorController {
         return "/views/user/calculator/defense";
     }
 
+
+    /**
+     * 계산기 > 방어력 > 등록 action
+     *
+     * @param user           유저 정보
+     * @param userStatListVO 유저 스탯 정보
+     * @param model          모델
+     * @return "/views/common/message"
+     */
     @RequestMapping("/defense/insert.do")
     public String defenseInsert(@AuthUser User user, UserStatListVO userStatListVO, ModelMap model) {
         calculatorService.insertStats(userStatListVO, user);
@@ -94,6 +111,15 @@ public class CalculatorController {
         return "/views/common/message";
     }
 
+
+    /**
+     * 계산기 > 방어력 > 수정 action
+     *
+     * @param user           유저 정보
+     * @param userStatListVO 유저 스탯 정보
+     * @param model          모델
+     * @return "/views/common/message"
+     */
     @RequestMapping("/defense/update.do")
     public String defenseUpdate(@AuthUser User user, UserStatListVO userStatListVO, ModelMap model) {
         calculatorService.updateStats(userStatListVO, user);
