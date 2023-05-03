@@ -1401,6 +1401,14 @@ h6 {
     background-color: #ffff54;;
 }
 
+.bg-t-green {
+    --bs-table-bg: #75fb4c;
+}
+
+.bg-t-mango {
+    --bs-table-bg: #eac451;
+}
+
 /* ============= 배경색 ============= */
 
 /* ============= 글자색 ============= */

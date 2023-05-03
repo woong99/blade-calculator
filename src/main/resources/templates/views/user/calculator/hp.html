@@ -2,18 +2,27 @@
 <html
         layout:decorate="~{layout/mainDefaultLayout}"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:th="http://www.thymeleaf.org">
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <body>
 <th:block layout:fragment="content">
-    <script src="/js/calculator.js"></script>
+    <script src="/js/calculator/hp.js"></script>
     <main class="main" id="main">
         <section class="section">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body" id="main-content">
-                            <div class="d-flex justify-content-center align-items-center bg-sky-blue text-blue fs-2 mt-2"
-                                 style="font-family: 'Nanum Pen Script', cursive;">블레이드 키우기 체력 & 방어 계산기
+                            <div class="d-flex justify-content-center align-items-center bg-sky-blue text-blue fs-2 mt-2 position-relative"
+                                 style="font-family: 'Nanum Pen Script', cursive;">블레이드 키우기 체력 계산기
+                                <button class="btn btn-primary position-absolute end-0"
+                                        id="btn-save"
+                                        sec:authorize="isAuthenticated()"
+                                        th:data-command="${command}">저장
+                                </button>
+                                <button class="btn btn-primary position-absolute end-0" data-command="noAuth"
+                                        id="btn-save" sec:authorize="!isAuthenticated()">
+                                    저장
+                                </button>
                             </div>
                             <!-- Primary Color Bordered Table -->
                             <table class="table table-bordered border-primary">
@@ -24,336 +33,62 @@
                                     <col style="width: 20%">
                                 </colgroup>
                                 <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td class="text-center">캐릭터의 데이터</td>
-                                    <td class="text-center">증가 또는 감소하는 값</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control natural-number"
-                                                id="hp-1"
-                                                oninput="onlyNumberAndComma(this)"
-                                                type="text"
-                                                value="1,000"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control natural-number"
-                                                id="hp-2"
-                                                oninput="onlyNumberAndComma(this)"
-                                                type="text"
-                                                value="0"/>
-                                    </td>
-                                    <td id="hp-3">1,000</td>
-                                </tr>
-                                <tr>
-                                    <td>생명력 증가</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="a-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="a-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="a-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>장신구 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="b-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="b-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="b-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>에고 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="c-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="c-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="c-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>피규어 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="d-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="d-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="d-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>인장 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="e-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="e-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="e-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>천상 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="f-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="f-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="f-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>유물 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="g-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="g-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="g-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>코어 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="h-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="h-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="h-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>스페셜 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="i-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="i-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="i-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>슈퍼 장신구 생명력 강화</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="j-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="j-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="j-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>슈퍼 에고 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="k-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="k-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="k-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>룬 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="l-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="l-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="l-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>문양 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="m-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="m-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="m-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>투지 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="n-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="n-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="n-3">100%</td>
-                                </tr>
-                                <tr>
-                                    <td>엠블럼 생명력</td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="o-1"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="100%"/>
-                                    </td>
-                                    <td class="bg-t-yellow">
-                                        <input
-                                                class="form-control percent"
-                                                id="o-2"
-                                                oninput="onlyNumber(this)"
-                                                type="text"
-                                                value="0%"/>
-                                    </td>
-                                    <td id="o-3">100%</td>
-                                </tr>
+                                <form id="hp-frm" method="post">
+                                    <tr class="bg-t-mango fw-bold">
+                                        <td></td>
+                                        <td class="text-center">데이터</td>
+                                        <td class="text-center">증가 / 감소</td>
+                                        <td class="text-center">최종</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Final HP</td>
+                                        <td class="bg-t-green" id="hp-data">0</td>
+                                        <td class="bg-t-green" id="hp-change-rate">0%</td>
+                                        <td class="bg-t-green" id="hp-result">0</td>
+                                    </tr>
+                                    <tr th:each="stat : ${stats}">
+                                        <td>
+                                            <input th:name="${'userStatList[' + statStat.index + '].name'}"
+                                                   th:text="${stat.description}"
+                                                   th:value="${stat.name}" type="hidden">
+                                        </td>
+                                        <td class="bg-t-yellow">
+                                            <input class="form-control natural-number"
+                                                   oninput="onlyNumberAndComma(this)"
+                                                   th:id="${stat.name + '_1'}"
+                                                   th:if="${stat.statType.equals('HP')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:value="${stat.point == null ? '1,000' : stat.point}"
+                                                   type="text">
+                                            <input class="form-control percent"
+                                                   oninput="onlyNumber(this)"
+                                                   th:id="${stat.name + '_1'}"
+                                                   th:if="${!stat.statType.equals('HP')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:value="${stat.point == null ? '100%' : stat.point}"
+                                                   type="text">
+                                        </td>
+                                        <td class="bg-t-yellow">
+                                            <input class="form-control natural-number"
+                                                   oninput="onlyNumberAndComma(this)"
+                                                   th:id="${stat.name + '_2'}"
+                                                   th:if="${stat.statType.equals('HP')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].changeRate'}"
+                                                   value="0">
+                                            <input class="form-control percent"
+                                                   oninput="onlyNumber(this)"
+                                                   th:id="${stat.name + '_2'}"
+                                                   th:if="${!stat.statType.equals('HP')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].changeRate'}"
+                                                   value="0%">
+                                        </td>
+                                        <td th:id="${stat.name + '_3'}"
+                                            th:text="${stat.point == null ? (stat.statType == 'HP_PERCENT' ? '0%' : '1,000') : stat.point}"></td>
+                                    </tr>
+                                </form>
                                 </tbody>
                             </table>
                             <!-- End Primary Color Bordered Table -->
-
                         </div>
                     </div>
                 </div>
