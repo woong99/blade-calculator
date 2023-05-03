@@ -5,7 +5,7 @@
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <body>
 <th:block layout:fragment="content">
-    <script src="/js/calculator/hp.js"></script>
+    <script src="/js/calculator/defense.js"></script>
     <main class="main" id="main">
         <section class="section">
             <div class="row justify-content-center">
@@ -13,7 +13,7 @@
                     <div class="card">
                         <div class="card-body" id="main-content">
                             <div class="d-flex justify-content-center align-items-center bg-sky-blue text-blue fs-2 mt-2 position-relative"
-                                 style="font-family: 'Nanum Pen Script', cursive;">블레이드 키우기 체력 계산기
+                                 style="font-family: 'Nanum Pen Script', cursive;">블레이드 키우기 방어력 계산기
                                 <button class="btn btn-primary position-absolute end-0"
                                         id="btn-save"
                                         sec:authorize="isAuthenticated()"
@@ -41,10 +41,10 @@
                                         <td class="text-center">최종</td>
                                     </tr>
                                     <tr>
-                                        <td>Final HP</td>
-                                        <td class="bg-t-green" id="hp-data">0</td>
-                                        <td class="bg-t-green" id="hp-change-rate">0%</td>
-                                        <td class="bg-t-green" id="hp-result">0</td>
+                                        <td>Final DEF</td>
+                                        <td class="bg-t-green" id="def-data">0</td>
+                                        <td class="bg-t-green" id="def-change-rate">0%</td>
+                                        <td class="bg-t-green" id="def-result">0</td>
                                     </tr>
                                     <tr th:each="stat : ${stats}">
                                         <td>
@@ -56,14 +56,14 @@
                                             <input class="form-control natural-number"
                                                    oninput="onlyNumberAndComma(this)"
                                                    th:id="${stat.name + '_1'}"
-                                                   th:if="${stat.statType.equals('HP')}"
+                                                   th:if="${stat.statType.equals('DEF')}"
                                                    th:name="${'userStatList[' + statStat.index + '].point'}"
                                                    th:value="${stat.point == null ? '1,000' : stat.point}"
                                                    type="text">
                                             <input class="form-control percent"
                                                    oninput="onlyNumber(this)"
                                                    th:id="${stat.name + '_1'}"
-                                                   th:if="${!stat.statType.equals('HP')}"
+                                                   th:if="${!stat.statType.equals('DEF')}"
                                                    th:name="${'userStatList[' + statStat.index + '].point'}"
                                                    th:value="${stat.point == null ? '100%' : stat.point}"
                                                    type="text">
@@ -72,18 +72,18 @@
                                             <input class="form-control natural-number"
                                                    oninput="onlyNumberAndComma(this)"
                                                    th:id="${stat.name + '_2'}"
-                                                   th:if="${stat.statType.equals('HP')}"
+                                                   th:if="${stat.statType.equals('DEF')}"
                                                    th:name="${'userStatList[' + statStat.index + '].changeRate'}"
                                                    value="0">
                                             <input class="form-control percent"
                                                    oninput="onlyNumber(this)"
                                                    th:id="${stat.name + '_2'}"
-                                                   th:if="${!stat.statType.equals('HP')}"
+                                                   th:if="${!stat.statType.equals('DEF')}"
                                                    th:name="${'userStatList[' + statStat.index + '].changeRate'}"
                                                    value="0%">
                                         </td>
                                         <td th:id="${stat.name + '_3'}"
-                                            th:text="${stat.point == null ? (stat.statType == 'HP_PERCENT' ? '100%' : '1,000') : stat.point}"></td>
+                                            th:text="${stat.point == null ? (stat.statType == 'DEF_PERCENT' ? '100%' : '1,000') : stat.point}"></td>
                                     </tr>
                                 </form>
                                 </tbody>

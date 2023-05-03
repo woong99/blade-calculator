@@ -1,15 +1,15 @@
 $(function () {
-    /* Final HP 계산 */
-    calculateProduct(HP);
+    /* Final DEF 계산 */
+    calculateProduct(DEF);
 
     /* 자연수 타입 블러 이벤트 */
     $(".natural-number").blur(function () {
-        calculateNaturalNumber(this, HP);
+        calculateNaturalNumber(this, DEF);
     });
 
     /* 퍼센트 타입 블러 이벤트 */
     $(".percent").blur(function () {
-        calculatePercent(this, HP);
+        calculatePercent(this, DEF);
     });
 
     /* 저장 버튼 클릭 이벤트 */
@@ -17,9 +17,9 @@ $(function () {
         const command = $("#btn-save").data("command");
         const frm = $("#hp-frm");
         if (command === "insert") {
-            frm.attr("action", "/calculator/hp/insert.do")
+            frm.attr("action", "/calculator/defense/insert.do")
         } else if (command === "update") {
-            frm.attr("action", "/calculator/hp/update.do")
+            frm.attr("action", "/calculator/defense/update.do")
         } else if (command === "noAuth") {
             alert("로그인 후 이용해주세요.");
             location.href = "/login";
