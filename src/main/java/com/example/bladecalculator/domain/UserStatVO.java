@@ -1,4 +1,4 @@
-package com.example.bladecalculator.vo;
+package com.example.bladecalculator.domain;
 
 import com.example.bladecalculator.entity.Stat;
 import com.example.bladecalculator.entity.UserStat;

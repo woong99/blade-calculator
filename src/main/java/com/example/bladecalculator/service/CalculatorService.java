@@ -1,14 +1,15 @@
 package com.example.bladecalculator.service;
 
+import com.example.bladecalculator.domain.UserGrowthListVO;
+import com.example.bladecalculator.domain.UserGrowthVO;
+import com.example.bladecalculator.domain.UserStatListVO;
+import com.example.bladecalculator.domain.UserStatVO;
+import com.example.bladecalculator.entity.DataMiningType;
 import com.example.bladecalculator.entity.StatType;
 import com.example.bladecalculator.entity.User;
-import com.example.bladecalculator.entity.UserStat;
+import com.example.bladecalculator.repository.GrowthRepository;
 import com.example.bladecalculator.repository.StatRepository;
-import com.example.bladecalculator.vo.UserStatListVO;
-import com.example.bladecalculator.vo.UserStatVO;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CalculatorService {
 
-    private static final String COMMAND = "command";
-    private static final String STATS = "stats";
     private final StatRepository statRepository;
+
+    private final GrowthRepository growthRepository;
 
 
     /**
@@ -30,41 +31,46 @@ public class CalculatorService {
      * @param statType 스탯 타입
      * @return 스탯
      */
-    public Map<String, Object> getStats(User user, StatType statType) {
-        Map<String, Object> map = new HashMap<>();
+    public List<UserStatVO> getStats(User user, StatType statType) {
+        return statRepository.getStats(user.getId(), statType);
+    }
 
-        List<UserStat> stats = statRepository.getStatsWithUserId(user.getUserId(), statType);
-        if (stats.isEmpty()) {
-            map.put(COMMAND, "insert");
-            map.put(STATS,
-                    statRepository.getStatsWithOutUserId(statType).stream().map(UserStatVO::toUserStatVO).toList());
-            return map;
+
+    /**
+     * 스탯을 저장한다.
+     *
+     * @param userStatListVO 유저 스탯 정보
+     * @param user           유저 정보
+     * @param statType       스탯 타입
+     */
+    public void saveStats(UserStatListVO userStatListVO, User user, StatType statType) {
+        boolean existsStat = statRepository.existsStat(user.getId(), statType);
+
+        if (existsStat) {
+            statRepository.updateStats(userStatListVO.getUserStatList(), user.getId());
+        } else {
+            statRepository.insertStats(userStatListVO.getUserStatList(), user.getId());
         }
-        map.put(COMMAND, "update");
-        map.put(STATS, stats.stream().map(UserStatVO::toUserStatVO).toList());
-
-        return map;
     }
 
 
-    /**
-     * 스탯을 등록한다.
-     *
-     * @param userStatListVO 유저 스탯 정보
-     * @param user           유저 정보
-     */
-    public void insertStats(UserStatListVO userStatListVO, User user) {
-        statRepository.insertStats(userStatListVO.getUserStatList(), user.getId());
+    public List<UserGrowthVO> getGrowths(User user) {
+        return growthRepository.getGrowths(user.getId());
     }
 
 
-    /**
-     * 스탯을 수정한다.
-     *
-     * @param userStatListVO 유저 스탯 정보
-     * @param user           유저 정보
-     */
-    public void updateStats(UserStatListVO userStatListVO, User user) {
-        statRepository.updateStats(userStatListVO.getUserStatList(), user.getId());
+    public UserGrowthVO getGrowthCost(String point, DataMiningType dataMiningType) {
+        return growthRepository.getGrowthCost(point, dataMiningType);
+    }
+
+
+    public void saveGrowths(UserGrowthListVO userGrowthListVO, User user) {
+        boolean existsGrowth = growthRepository.existsGrowth(user.getId());
+
+        if (existsGrowth) {
+            growthRepository.updateGrowths(userGrowthListVO.getUserGrowthList(), user.getId());
+        } else {
+            growthRepository.insertGrowths(userGrowthListVO.getUserGrowthList(), user.getId());
+        }
     }
 }

@@ -1,5 +1,6 @@
 const DEF = "def";
 const HP = "hp";
+const ATK = "atk";
 
 /* 스탯 변환 */
 function exchangeStat(data) {

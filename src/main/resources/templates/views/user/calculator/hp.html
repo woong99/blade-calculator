@@ -17,7 +17,7 @@
                                 <button class="btn btn-primary position-absolute end-0"
                                         id="btn-save"
                                         sec:authorize="isAuthenticated()"
-                                        th:data-command="${command}">저장
+                                >저장
                                 </button>
                                 <button class="btn btn-primary position-absolute end-0" data-command="noAuth"
                                         id="btn-save" sec:authorize="!isAuthenticated()">
@@ -34,6 +34,7 @@
                                 </colgroup>
                                 <tbody>
                                 <form id="hp-frm" method="post">
+                                    <input name="type" th:value="${statType}" type="hidden">
                                     <tr class="bg-t-mango fw-bold">
                                         <td></td>
                                         <td class="text-center">데이터</td>
