@@ -1,11 +1,13 @@
 package com.example.bladecalculator.repository;
 
+import com.example.bladecalculator.domain.UserStatVO;
 import com.example.bladecalculator.entity.QStat;
 import com.example.bladecalculator.entity.QUserStat;
-import com.example.bladecalculator.entity.Stat;
 import com.example.bladecalculator.entity.StatType;
 import com.example.bladecalculator.entity.UserStat;
-import com.example.bladecalculator.vo.UserStatVO;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -35,12 +37,16 @@ public class StatRepositoryImpl implements StatRepositoryCustom {
      * @return 스탯
      */
     @Override
-    public List<UserStat> getStatsWithUserId(String userId, StatType statType) {
+    public List<UserStatVO> getStats(Long userId, StatType statType) {
+        Expression<String> statTypeAlias = Expressions.as(qStat.type.stringValue(), "statType");
+
         return jpaQueryFactory
-                .selectFrom(qUserStat)
-                .leftJoin(qUserStat.stat, qStat)
-                .fetchJoin()
-                .where(qUserStat.user.userId.eq(userId))
+                .select(Projections.fields(UserStatVO.class, qStat.name, statTypeAlias,
+                        qStat.description,
+                        qUserStat.point))
+                .from(qStat)
+                .leftJoin(qStat.userStats, qUserStat)
+                .on(qUserStat.user.id.eq(userId))
                 .where(qStat.type.stringValue().like(statType.toString() + "%"))
                 .orderBy(qStat.statOrder.asc())
                 .fetch();
@@ -48,19 +54,21 @@ public class StatRepositoryImpl implements StatRepositoryCustom {
 
 
     /**
-     * 유저의 스탯을 조회한다.
+     * 저장된 스탯 정보가 있는지 조회한다.
      *
+     * @param userId   유저 ID
      * @param statType 스탯 타입
-     * @return 스탯
+     * @return 스탯 저장 유무
      */
     @Override
-    public List<Stat> getStatsWithOutUserId(StatType statType) {
-        return jpaQueryFactory
-                .select(qStat)
-                .from(qStat)
+    public boolean existsStat(Long userId, StatType statType) {
+        UserStat fetchOne = jpaQueryFactory
+                .selectFrom(qUserStat)
+                .leftJoin(qUserStat.stat, qStat)
+                .where(qUserStat.user.id.eq(userId))
                 .where(qStat.type.stringValue().like(statType.toString() + "%"))
-                .orderBy(qStat.statOrder.asc())
-                .fetch();
+                .fetchFirst();
+        return fetchOne != null;
     }
 
 

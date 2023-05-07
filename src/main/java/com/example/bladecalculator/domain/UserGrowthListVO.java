@@ -1,4 +1,4 @@
-package com.example.bladecalculator.vo;
+package com.example.bladecalculator.domain;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserStatListVO {
+public class UserGrowthListVO {
 
-    private List<UserStatVO> userStatList;
+    private List<UserGrowthVO> userGrowthList;
 }

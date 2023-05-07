@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum StatType {
-    HP, HP_PERCENT, DEF, DEF_PERCENT, ATK
+    HP, HP_PERCENT, DEF, DEF_PERCENT, ATK, ATK_PERCENT, ATK_CRITICAL
 }

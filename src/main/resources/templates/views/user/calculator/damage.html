@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html
+        layout:decorate="~{layout/mainDefaultLayout}"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block layout:fragment="content">
+    <script src="/js/calculator/damage.js"></script>
+    <main class="main" id="main">
+        <section class="section">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body" id="main-content">
+                            <div class="d-flex justify-content-center align-items-center bg-sky-blue text-blue fs-2 mt-2 position-relative"
+                                 style="font-family: 'Nanum Pen Script', cursive;">블레이드 키우기 데미지 계산기
+                                <button class="btn btn-primary position-absolute end-0"
+                                        id="btn-save"
+                                        sec:authorize="isAuthenticated()"
+                                >
+                                    저장
+                                </button>
+                                <button class="btn btn-primary position-absolute end-0" data-command="noAuth"
+                                        id="btn-save" sec:authorize="!isAuthenticated()">
+                                    저장
+                                </button>
+                            </div>
+                            <!-- Primary Color Bordered Table -->
+                            <table class="table table-bordered border-primary">
+                                <colgroup>
+                                    <col style="">
+                                    <col style="width: 20%;">
+                                    <col style="width: 20%;">
+                                    <col style="width: 20%">
+                                </colgroup>
+                                <tbody>
+                                <form id="damage-frm" method="post">
+                                    <input name="type" th:value="${statType}" type="hidden">
+                                    <tr class="bg-t-mango fw-bold">
+                                        <td></td>
+                                        <td class="text-center">데이터</td>
+                                        <td class="text-center">증가 / 감소</td>
+                                        <td class="text-center">최종</td>
+                                    </tr>
+                                    <tr>
+                                        <td>평균 자동공격피해</td>
+                                        <td class="bg-t-green" id="avg-data">0</td>
+                                        <input id="avg-data-before" type="hidden"/>
+                                        <td class="bg-t-green" id="avg-change-rate">0%</td>
+                                        <td class="bg-t-green" id="avg-result">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>최종 데미지</td>
+                                        <td class="bg-t-green" id="final-data">0</td>
+                                        <input id="final-data-before" type="hidden"/>
+                                        <td class="bg-t-green" id="final-change-rate">0%</td>
+                                        <td class="bg-t-green" id="final-result">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>최종 치명타 데미지</td>
+                                        <td class="bg-t-green" id="final-c-data">0</td>
+                                        <input id="final-c-data-before" type="hidden"/>
+                                        <td class="bg-t-green" id="final-c-change-rate">0%</td>
+                                        <td class="bg-t-green" id="final-c-result">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>최종 슈퍼 치명타 데미지</td>
+                                        <td class="bg-t-green" id="final-s-c-data">0</td>
+                                        <input id="final-s-c-data-before" type="hidden"/>
+                                        <td class="bg-t-green" id="final-s-c-change-rate">0%</td>
+                                        <td class="bg-t-green" id="final-s-c-result">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>최종 하이퍼 치명타 데미지</td>
+                                        <td class="bg-t-green" id="final-h-c-data">0</td>
+                                        <input id="final-h-c-data-before" type="hidden"/>
+                                        <td class="bg-t-green" id="final-h-c-change-rate">0%</td>
+                                        <td class="bg-t-green" id="final-h-c-result">0</td>
+                                    </tr>
+                                    <tr th:each="stat : ${stats}">
+                                        <td>
+                                            <input th:name="${'userStatList[' + statStat.index + '].name'}"
+                                                   th:text="${stat.description}"
+                                                   th:value="${stat.name}" type="hidden">
+                                        </td>
+                                        <td class="bg-t-yellow">
+                                            <input class="form-control natural-number"
+                                                   oninput="onlyNumberAndComma(this)"
+                                                   th:id="${stat.name + '_1'}"
+                                                   th:if="${stat.statType.equals('ATK')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:value="${stat.point == null ? '1,000' : stat.point}"
+                                                   type="text">
+                                            <input class="form-control percent"
+                                                   oninput="onlyNumber(this)"
+                                                   th:id="${stat.name + '_1'}"
+                                                   th:if="${stat.statType.equals('ATK_PERCENT')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:value="${stat.point == null ? '100%' : stat.point}"
+                                                   type="text">
+                                            <input class="form-control critical"
+                                                   oninput="onlyNumber(this)"
+                                                   th:id="${stat.name + '_1'}"
+                                                   th:if="${stat.statType.equals('ATK_CRITICAL')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:value="${stat.point == null ? '100%' : stat.point}"
+                                                   type="text">
+                                        </td>
+                                        <td class="bg-t-yellow">
+                                            <input class="form-control natural-number"
+                                                   oninput="onlyNumberAndComma(this)"
+                                                   th:id="${stat.name + '_2'}"
+                                                   th:if="${stat.statType.equals('ATK')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].changeRate'}"
+                                                   value="0">
+                                            <input class="form-control percent"
+                                                   oninput="onlyNumber(this)"
+                                                   th:id="${stat.name + '_2'}"
+                                                   th:if="${stat.statType.equals('ATK_PERCENT')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].changeRate'}"
+                                                   value="0%">
+                                            <input class="form-control critical"
+                                                   oninput="onlyNumber(this)"
+                                                   th:id="${stat.name + '_2'}"
+                                                   th:if="${stat.statType.equals('ATK_CRITICAL')}"
+                                                   th:name="${'userStatList[' + statStat.index + '].changeRate'}"
+                                                   value="0%">
+                                        </td>
+                                        <td th:id="${stat.name + '_3'}"
+                                            th:text="${stat.point == null ? (stat.statType == 'ATK_PERCENT' || stat.statType == 'ATK_CRITICAL' ? '100%' : '1,000') : stat.point}"></td>
+                                    </tr>
+                                </form>
+                                </tbody>
+                            </table>
+
+                            <div class="d-flex justify-content-center align-items-center bg-sky-blue text-blue fs-2 mt-2 position-relative"
+                                 style="font-family: 'Nanum Pen Script', cursive;">블레이드 키우기 골드 스탯 계산기
+                                <button class="btn btn-primary position-absolute end-0"
+                                        id="btn-growth-save"
+                                        sec:authorize="isAuthenticated()"
+                                >
+                                    저장
+                                </button>
+                            </div>
+                            <table class="table table-bordered border-primary">
+                                <colgroup>
+                                    <col style="">
+                                    <col style="width: 20%;">
+                                    <col style="width: 20%;">
+                                    <col style="width: 20%">
+                                </colgroup>
+                                <tbody>
+                                <tr class="bg-t-mango fw-bold position-relative">
+                                    <td></td>
+                                    <td class="text-center">현재 골드 스탯 레벨</td>
+                                    <td class="text-center">업그레이드 비용</td>
+                                    <td class="text-center">1골드당 피해량</td>
+                                </tr>
+                                <form id="growth-frm" method="post">
+                                    <tr th:each="growth : ${growths}">
+                                        <td class="d-flex align-items-center border-end-0"
+                                            th:id="${growth.name + '_5'}">
+                                            <img alt="" class="pe-1" src="" th:alt="${growth.name}"
+                                                 th:src="${growth.imageUrl}"/>
+                                            <input th:name="${'userGrowthList[' + growthStat.index + '].name'}"
+                                                   th:text="${growth.description}"
+                                                   th:value="${growth.name}" type="hidden">
+                                        </td>
+                                        <td class="bg-t-yellow">
+                                            <input class="form-control growth"
+                                                   oninput="onlyNumberAndComma(this)"
+                                                   th:id="${growth.name + '_1'}"
+                                                   th:name="${'userGrowthList[' + growthStat.index + '].point'}"
+                                                   th:p="${growth.valueIncrease}"
+                                                   th:type="${growth.dataMiningType}"
+                                                   th:value="${growth.point == null ? '0' : growth.point}"
+                                                   type="text">
+                                        </td>
+                                        <td th:id="${growth.name + '_2'}" th:text="${growth.cost}"></td>
+                                        <td th:id="${growth.name + '_3'}"></td>
+                                        <input th:id="${growth.name + '_4'}" type="hidden">
+                                    </tr>
+                                    <tr>
+                                        <td class="border-0"></td>
+                                        <td class="border-0"></td>
+                                        <td class="border-0"></td>
+                                        <td class="border-0"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: #de9d9b">슈퍼 공격력 못 찍을 시 2000</td>
+                                        <td class="bg-t-mango text-center fw-bold">업그레이드 추천 :</td>
+                                        <td class="text-center fw-bold" colspan="2" id="growth-upgrade-first">
+                                        </td>
+                                    </tr>
+                                </form>
+                                </tbody>
+                            </table>
+                            <!-- End Primary Color Bordered Table -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</th:block>
+</body>
+</html>
