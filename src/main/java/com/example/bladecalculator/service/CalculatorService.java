@@ -54,16 +54,32 @@ public class CalculatorService {
     }
 
 
+    /**
+     * 골드 스탯을 조회한다.
+     * @param user 유저 정보
+     * @return 골드 스탯
+     */
     public List<UserGrowthVO> getGrowths(User user) {
         return growthRepository.getGrowths(user.getId());
     }
 
 
+    /**
+     * 골드 스탯을 단일 조회한다.
+     * @param point 레벨
+     * @param dataMiningType 골드 스탯 타입
+     * @return 단일 골드 스탯
+     */
     public UserGrowthVO getGrowthCost(String point, DataMiningType dataMiningType) {
         return growthRepository.getGrowthCost(point, dataMiningType);
     }
 
 
+    /**
+     * 골드 스탯을 저장한다.
+     * @param userGrowthListVO 유저 골드 스탯 정보
+     * @param user 유저 정보
+     */
     public void saveGrowths(UserGrowthListVO userGrowthListVO, User user) {
         boolean existsGrowth = growthRepository.existsGrowth(user.getId());
 

@@ -25,13 +25,14 @@ public class GrowthRepositoryImpl implements GrowthRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
     private final JdbcTemplate jdbcTemplate;
 
-    QGrowth qGrowth = QGrowth.growth;
-
     QUserGrowth qUserGrowth = QUserGrowth.userGrowth;
 
-    QDataMining qDataMining = QDataMining.dataMining;
 
-
+    /**
+     * 유저의 골드 스탯 정보를 조회한다.
+     * @param userId 유저 ID
+     * @return 골드 스탯 정보
+     */
     @Override
     public List<UserGrowthVO> getGrowths(Long userId) {
         String sql = "select g.name, g.image_url, g.description, g.data_mining_type, u.point, d.cost, d.value_increase "
@@ -53,6 +54,12 @@ public class GrowthRepositoryImpl implements GrowthRepositoryCustom {
     }
 
 
+    /**
+     * 단일 골드 스탯 정보를 조회한다.
+     * @param point 레벨 정보
+     * @param dataMiningType 골드 스탯 타입
+     * @return 단일 골드 스탯 정보
+     */
     @Override
     public UserGrowthVO getGrowthCost(String point, DataMiningType dataMiningType) {
         String sql = "select cost, value_increase from data_mining where convert(level, nchar) = ? and data_mining_type = ?";
@@ -67,6 +74,11 @@ public class GrowthRepositoryImpl implements GrowthRepositoryCustom {
     }
 
 
+    /**
+     * 저장된 골드 스탯 정보가 있는지 조회한다.
+     * @param userId 유저 ID
+     * @return 골드 스탯 저장 유무
+     */
     @Override
     public boolean existsGrowth(Long userId) {
         UserGrowth fetchOne = jpaQueryFactory
@@ -77,6 +89,11 @@ public class GrowthRepositoryImpl implements GrowthRepositoryCustom {
     }
 
 
+    /**
+     * 골드 스탯을 저장한다.
+     * @param userGrowthVOS 유저 골드 스탯 정보
+     * @param userId 유저 ID
+     */
     @Override
     public void insertGrowths(List<UserGrowthVO> userGrowthVOS, Long userId) {
         String sql = "INSERT INTO user_growth (point, growth_id, user_id, created_at) VALUES (?, ?, ?, ?)";
@@ -100,6 +117,11 @@ public class GrowthRepositoryImpl implements GrowthRepositoryCustom {
     }
 
 
+    /**
+     * 골드 스탯을 수정한다.
+     * @param userGrowthVOS 유저 골드 스탯 정보
+     * @param userId 유저 ID
+     */
     @Override
     public void updateGrowths(List<UserGrowthVO> userGrowthVOS, Long userId) {
         String sql = "UPDATE user_growth SET point = ?, updated_at = ? WHERE user_id = ? and growth_id = ?";

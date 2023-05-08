@@ -41,7 +41,7 @@ public class CalculatorController {
 
         model.addAttribute("stats", stats);
         model.addAttribute("statType", StatType.HP);
-        return "/views/user/calculator/hp";
+        return "views/user/calculator/hp";
     }
 
 
@@ -62,7 +62,7 @@ public class CalculatorController {
         model.addAttribute("type", "msg+url");
         model.addAttribute("message", "저장이 완료되었습니다.");
         model.addAttribute("returnUrl", "/calculator/hp");
-        return "/views/common/message";
+        return "views/common/message";
     }
 
 
@@ -79,7 +79,7 @@ public class CalculatorController {
 
         model.addAttribute("stats", stats);
         model.addAttribute("statType", StatType.DEF);
-        return "/views/user/calculator/defense";
+        return "views/user/calculator/defense";
     }
 
 
@@ -100,7 +100,7 @@ public class CalculatorController {
         model.addAttribute("type", "msg+url");
         model.addAttribute("message", "저장이 완료되었습니다.");
         model.addAttribute("returnUrl", "/calculator/defense");
-        return "/views/common/message";
+        return "views/common/message";
     }
 
 
@@ -115,12 +115,11 @@ public class CalculatorController {
     public String damage(@AuthUser User user, ModelMap model) {
         List<UserStatVO> stats = calculatorService.getStats(user, StatType.ATK);
         List<UserGrowthVO> growths = calculatorService.getGrowths(user);
-        stats.forEach(System.out::println);
-        growths.forEach(System.out::println);
+
         model.addAttribute("stats", stats);
         model.addAttribute("statType", StatType.ATK);
         model.addAttribute("growths", growths);
-        return "/views/user/calculator/damage";
+        return "views/user/calculator/damage";
     }
 
 
@@ -141,16 +140,21 @@ public class CalculatorController {
         model.addAttribute("type", "msg+url");
         model.addAttribute("message", "저장이 완료되었습니다.");
         model.addAttribute("returnUrl", "/calculator/damage");
-        return "/views/common/message";
+        return "views/common/message";
     }
 
 
+    /**
+     * 계산기 > 데미지 & 성장 > 골드 스탯 정보 조회
+     * @param point
+     * @param dataMiningType
+     * @return
+     */
     @RequestMapping("/damage/growth/cost")
     public ResponseEntity<UserGrowthVO> getGrowthCost(@RequestParam("point") String point, @RequestParam("type")
     DataMiningType dataMiningType) {
-        log.info("point : {}, type : {}", point, dataMiningType);
         UserGrowthVO cost = calculatorService.getGrowthCost(point, dataMiningType);
-        log.info("cost : {}", cost);
+
         if (cost == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -158,6 +162,13 @@ public class CalculatorController {
     }
 
 
+    /**
+     * 계산기 > 데미지 & 성장 > 골드 스탯 저장 action
+     * @param user
+     * @param userGrowthListVO
+     * @param model
+     * @return
+     */
     @RequestMapping("/damage/growth/save.do")
     public String growthSave(@AuthUser User user, UserGrowthListVO userGrowthListVO, ModelMap model) {
         userGrowthListVO.getUserGrowthList().forEach(System.out::println);
@@ -166,6 +177,6 @@ public class CalculatorController {
         model.addAttribute("type", "msg+url");
         model.addAttribute("message", "저장이 완료되었습니다.");
         model.addAttribute("returnUrl", "/calculator/damage");
-        return "/views/common/message";
+        return "views/common/message";
     }
 }

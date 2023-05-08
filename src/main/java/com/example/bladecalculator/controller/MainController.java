@@ -15,7 +15,7 @@ public class MainController {
 
     @RequestMapping("/")
     public String main() throws IOException {
-        return "/views/user/main";
+        return "views/user/main";
     }
 
 
@@ -24,6 +24,6 @@ public class MainController {
         if (user != null) {
             return "redirect:/";
         }
-        return "/views/login";
+        return "views/login";
     }
 }
