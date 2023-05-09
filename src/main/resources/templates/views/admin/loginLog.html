@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html
+        layout:decorate="~{layout/mainDefaultLayout}"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block layout:fragment="content">
+    <script src="/js/admin/loginLog.js"></script>
+    <main class="main" id="main">
+        <section class="section">
+            <div class="row justify-content-center">
+                <div class="pagetitle col-lg-10">
+                    <h1>로그인 내역</h1>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">관리자</li>
+                            <li class="breadcrumb-item active">로그인 내역</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-10">
+                    <div class="card">
+                        <div class="card-body pt-3" id="main-content">
+                            <h5 class="card-title pt-0 mb-0">총 [[${totalElements}]]개</h5>
+                            <table class="table table-bordered border-primary">
+                                <colgroup>
+                                    <col style="">
+                                    <col style="">
+                                    <col style="">
+                                    <col style="">
+                                    <col>
+                                </colgroup>
+                                <tbody>
+                                <tr class="text-center">
+                                    <th>번호</th>
+                                    <th>아이디</th>
+                                    <th>접근IP</th>
+                                    <th>일시</th>
+                                    <th>상태</th>
+                                </tr>
+                                <tr th:each="log : ${logs}">
+                                    <td class="text-center"
+                                        th:text="${totalElements - (size * (nowPage - 1)) - logStat.index}"></td>
+                                    <td class="text-center" th:text="${log.userId}"></td>
+                                    <td class="text-center" th:text="${log.tryIp}"></td>
+                                    <td class="text-center"
+                                        th:text="${#temporals.format(log.tryAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    <td class="text-center" th:switch="${log.tryFlag}">
+                                        <th:block th:case="SUCCESS">로그인 성공</th:block>
+                                        <th:block th:case="FAIL">로그인 실패</th:block>
+                                        <th:block th:case="LOGOUT">로그아웃</th:block>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:classappend="${nowPage == 1 ? 'disabled' : ''}">
+                                        <a aria-disabled="true" class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <th:block th:each="page : ${#numbers.sequence(1, totalPages)}">
+                                        <li class="page-item" th:classappend="${page == nowPage ? 'active' : ''}"><a
+                                                class="page-link"
+                                                th:onclick="page([[${page}]])" th:text="${page}"></a>
+                                        </li>
+                                    </th:block>
+                                    <li class="page-item" th:classappend="${nowPage == totalPages ? 'disabled' : ''}">
+                                        <a class="page-link">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <form id="loginLogFrm" method="post">
+                                <input id="page" name="page" type="hidden">
+                            </form>
+                            <!-- End Primary Color Bordered Table -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</th:block>
+</body>
+</html>
