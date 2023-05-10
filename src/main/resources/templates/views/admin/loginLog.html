@@ -21,7 +21,7 @@
                 <div class="col-lg-10">
                     <div class="card">
                         <div class="card-body pt-3" id="main-content">
-                            <h5 class="card-title pt-0 mb-0">총 [[${totalElements}]]개</h5>
+                            <h5 class="card-title pt-0 mb-0">총 [[${pagination.totalElements}]]개</h5>
                             <table class="table table-bordered border-primary">
                                 <colgroup>
                                     <col style="">
@@ -38,9 +38,9 @@
                                     <th>일시</th>
                                     <th>상태</th>
                                 </tr>
-                                <tr th:each="log : ${logs}">
+                                <tr th:each="log : ${pagination.content}">
                                     <td class="text-center"
-                                        th:text="${totalElements - (size * (nowPage - 1)) - logStat.index}"></td>
+                                        th:text="${pagination.totalElements - (pagination.size * (pagination.nowPage - 1)) - logStat.index}"></td>
                                     <td class="text-center" th:text="${log.userId}"></td>
                                     <td class="text-center" th:text="${log.tryIp}"></td>
                                     <td class="text-center"
@@ -55,17 +55,41 @@
                             </table>
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-center">
-                                    <li class="page-item" th:classappend="${nowPage == 1 ? 'disabled' : ''}">
-                                        <a aria-disabled="true" class="page-link" href="#" tabindex="-1">Previous</a>
+                                    <!--                                    <li class="page-item" th:classappend="${pagination.nowPage == 1 ? 'disabled' : ''}">-->
+                                    <!--                                        <a aria-disabled="true" class="page-link" href="#" tabindex="-1">Previous</a>-->
+                                    <!--                                    </li>-->
+                                    <li class="page-item"
+                                        th:classappend="${pagination.firstPage == 1 ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           th:onclick="page([[${pagination.firstPage - pagination.size}]])">
+                                            <div class="icon"><i class="bx bxs-chevrons-left"></i></div>
+                                        </a>
                                     </li>
-                                    <th:block th:each="page : ${#numbers.sequence(1, totalPages)}">
-                                        <li class="page-item" th:classappend="${page == nowPage ? 'active' : ''}"><a
+                                    <li class="page-item"
+                                        th:classappend="${pagination.nowPage == 1 ? 'disabled' : ''}">
+                                        <a class="page-link" th:onclick="page([[${pagination.nowPage - 1}]])">
+                                            <div class="icon"><i class="bx bxs-chevron-left"></i></div>
+                                        </a>
+                                    </li>
+                                    <th:block
+                                            th:each="page : ${#numbers.sequence(pagination.firstPage, pagination.lastPage)}">
+                                        <li class="page-item"
+                                            th:classappend="${page == pagination.nowPage ? 'active' : ''}"><a
                                                 class="page-link"
                                                 th:onclick="page([[${page}]])" th:text="${page}"></a>
                                         </li>
                                     </th:block>
-                                    <li class="page-item" th:classappend="${nowPage == totalPages ? 'disabled' : ''}">
-                                        <a class="page-link">Next</a>
+                                    <li class="page-item"
+                                        th:classappend="${pagination.nowPage == pagination.totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" th:onclick="page([[${pagination.nowPage + 1}]])">
+                                            <div class="icon"><i class="bx bxs-chevron-right"></i></div>
+                                        </a>
+                                    </li>
+                                    <li class="page-item"
+                                        th:classappend="${pagination.lastPage == pagination.totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" th:onclick="page([[${pagination.lastPage + 1}]])">
+                                            <div class="icon"><i class="bx bxs-chevrons-right"></i></div>
+                                        </a>
                                     </li>
                                 </ul>
                             </nav>
