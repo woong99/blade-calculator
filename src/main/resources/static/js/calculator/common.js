@@ -119,3 +119,30 @@ function calculatePercent(e, stat) {
 
     calculateProduct(stat);
 }
+
+/* 엔터 -> 탭 */
+function enterToTab(e) {
+    let key = e.key || e.keyCode;
+
+    if (key === "Enter" || key === 13) {
+        if (e.target.getAttribute("tabindex")) {
+            e.preventDefault();
+            const preTabIndex = e.target.getAttribute("tabindex").split("_")[0];
+            const tabIndex = parseInt(e.target.getAttribute("tabindex").split("_")[1]) + 1;
+            const nextTabIndex = preTabIndex + '_' + tabIndex;
+            const nextElement = $("[tabindex=" + nextTabIndex + ']');
+
+            if (nextElement.length > 0) {
+                nextElement.focus();
+            } else {
+                e.target.blur();
+            }
+        }
+    }
+}
+
+$(function () {
+    $("input[type=text]").keyup(function (e) {
+        enterToTab(e);
+    })
+})
