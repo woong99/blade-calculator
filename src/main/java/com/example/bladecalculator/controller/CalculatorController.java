@@ -3,6 +3,8 @@ package com.example.bladecalculator.controller;
 import com.example.bladecalculator.auth.annotation.AuthUser;
 import com.example.bladecalculator.domain.UserGrowthListVO;
 import com.example.bladecalculator.domain.UserGrowthVO;
+import com.example.bladecalculator.domain.UserSkillListVO;
+import com.example.bladecalculator.domain.UserSkillVO;
 import com.example.bladecalculator.domain.UserStatListVO;
 import com.example.bladecalculator.domain.UserStatVO;
 import com.example.bladecalculator.entity.DataMiningType;
@@ -115,10 +117,14 @@ public class CalculatorController {
     public String damage(@AuthUser User user, ModelMap model) {
         List<UserStatVO> stats = calculatorService.getStats(user, StatType.ATK);
         List<UserGrowthVO> growths = calculatorService.getGrowths(user);
+        List<UserSkillVO> skills = calculatorService.getSkills(user);
+
+        skills.forEach(d -> log.info("skill : {}", d));
 
         model.addAttribute("stats", stats);
         model.addAttribute("statType", StatType.ATK);
         model.addAttribute("growths", growths);
+        model.addAttribute("skills", skills);
         return "views/user/calculator/damage";
     }
 
@@ -146,9 +152,10 @@ public class CalculatorController {
 
     /**
      * 계산기 > 데미지 & 성장 > 골드 스탯 정보 조회
-     * @param point
-     * @param dataMiningType
-     * @return
+     *
+     * @param point          스탯 포인트
+     * @param dataMiningType 스탯 타입
+     * @return 골드 스탯 정보
      */
     @RequestMapping("/damage/growth/cost")
     public ResponseEntity<UserGrowthVO> getGrowthCost(@RequestParam("point") String point, @RequestParam("type")
@@ -164,15 +171,51 @@ public class CalculatorController {
 
     /**
      * 계산기 > 데미지 & 성장 > 골드 스탯 저장 action
-     * @param user
-     * @param userGrowthListVO
-     * @param model
-     * @return
+     *
+     * @param user             유저 정보
+     * @param userGrowthListVO 유저 골드 스탯 정보
+     * @param model            모델
+     * @return "views/common/message"
      */
     @RequestMapping("/damage/growth/save.do")
     public String growthSave(@AuthUser User user, UserGrowthListVO userGrowthListVO, ModelMap model) {
-        userGrowthListVO.getUserGrowthList().forEach(System.out::println);
         calculatorService.saveGrowths(userGrowthListVO, user);
+
+        model.addAttribute("type", "msg+url");
+        model.addAttribute("message", "저장이 완료되었습니다.");
+        model.addAttribute("returnUrl", "/calculator/damage");
+        return "views/common/message";
+    }
+
+
+    /**
+     * 계산기 > 데미지 & 성장 > 스킬 정보 조회
+     *
+     * @param skillId 스킬 ID
+     * @return 스킬 정보
+     */
+    @RequestMapping("/damage/skill/detail")
+    public ResponseEntity<UserSkillVO> getSkillCost(@RequestParam("skillId") String skillId) {
+        UserSkillVO skill = calculatorService.getSkill(skillId);
+
+        if (skill == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(skill);
+    }
+
+
+    /**
+     * 계산기 > 데미지 & 성장 > 스킬 정보 저장 action
+     *
+     * @param user            유저 정보
+     * @param userSkillListVO 유저 스킬 정보
+     * @param model           모델
+     * @return "views/common/message";
+     */
+    @RequestMapping("/damage/skill/save.do")
+    public String skillSave(@AuthUser User user, UserSkillListVO userSkillListVO, ModelMap model) {
+        calculatorService.saveSkills(userSkillListVO, user);
 
         model.addAttribute("type", "msg+url");
         model.addAttribute("message", "저장이 완료되었습니다.");

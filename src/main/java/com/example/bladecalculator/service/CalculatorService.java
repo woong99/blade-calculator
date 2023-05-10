@@ -2,12 +2,15 @@ package com.example.bladecalculator.service;
 
 import com.example.bladecalculator.domain.UserGrowthListVO;
 import com.example.bladecalculator.domain.UserGrowthVO;
+import com.example.bladecalculator.domain.UserSkillListVO;
+import com.example.bladecalculator.domain.UserSkillVO;
 import com.example.bladecalculator.domain.UserStatListVO;
 import com.example.bladecalculator.domain.UserStatVO;
 import com.example.bladecalculator.entity.DataMiningType;
 import com.example.bladecalculator.entity.StatType;
 import com.example.bladecalculator.entity.User;
 import com.example.bladecalculator.repository.GrowthRepository;
+import com.example.bladecalculator.repository.SkillRepository;
 import com.example.bladecalculator.repository.StatRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,8 @@ public class CalculatorService {
     private final StatRepository statRepository;
 
     private final GrowthRepository growthRepository;
+
+    private final SkillRepository skillRepository;
 
 
     /**
@@ -56,6 +61,7 @@ public class CalculatorService {
 
     /**
      * 골드 스탯을 조회한다.
+     *
      * @param user 유저 정보
      * @return 골드 스탯
      */
@@ -66,7 +72,8 @@ public class CalculatorService {
 
     /**
      * 골드 스탯을 단일 조회한다.
-     * @param point 레벨
+     *
+     * @param point          레벨
      * @param dataMiningType 골드 스탯 타입
      * @return 단일 골드 스탯
      */
@@ -77,8 +84,9 @@ public class CalculatorService {
 
     /**
      * 골드 스탯을 저장한다.
+     *
      * @param userGrowthListVO 유저 골드 스탯 정보
-     * @param user 유저 정보
+     * @param user             유저 정보
      */
     public void saveGrowths(UserGrowthListVO userGrowthListVO, User user) {
         boolean existsGrowth = growthRepository.existsGrowth(user.getId());
@@ -87,6 +95,45 @@ public class CalculatorService {
             growthRepository.updateGrowths(userGrowthListVO.getUserGrowthList(), user.getId());
         } else {
             growthRepository.insertGrowths(userGrowthListVO.getUserGrowthList(), user.getId());
+        }
+    }
+
+
+    /**
+     * 스킬 정보를 조회한다.
+     *
+     * @param user 유저 정보
+     * @return 스킬 정보
+     */
+    public List<UserSkillVO> getSkills(User user) {
+        return skillRepository.getSkills(user.getId());
+    }
+
+
+    /**
+     * 스킬 정보를 단일 조회한다.
+     *
+     * @param skillId 스킬 ID
+     * @return 스킬 단일 정보
+     */
+    public UserSkillVO getSkill(String skillId) {
+        return skillRepository.getSkill(skillId);
+    }
+
+
+    /**
+     * 스킬 정보를 저장한다.
+     *
+     * @param userSkillListVO 유저 스킬 정보
+     * @param user            유저 정보
+     */
+    public void saveSkills(UserSkillListVO userSkillListVO, User user) {
+        boolean existsSkill = skillRepository.existsSkill(user.getId());
+
+        if (existsSkill) {
+            skillRepository.updateSkills(userSkillListVO.getUserSkillList(), user.getId());
+        } else {
+            skillRepository.insertSkills(userSkillListVO.getUserSkillList(), user.getId());
         }
     }
 }
