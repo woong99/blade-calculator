@@ -195,6 +195,66 @@
                                 </form>
                                 </tbody>
                             </table>
+
+                            <div class="d-flex justify-content-center align-items-center bg-sky-blue text-blue fs-2 mt-2 position-relative"
+                                 style="font-family: 'Nanum Pen Script', cursive;">블레이드 키우기 스킬 계산기
+                                <button class="btn btn-primary position-absolute end-0"
+                                        id="btn-skill-save"
+                                        sec:authorize="isAuthenticated()"
+                                >
+                                    저장
+                                </button>
+                            </div>
+                            <table class="table table-bordered border-primary">
+                                <colgroup>
+                                    <col style="">
+                                    <col style="width: 20%;">
+                                    <col style="width: 20%;">
+                                    <col style="width: 20%">
+                                </colgroup>
+                                <tbody>
+                                <tr class="bg-t-mango fw-bold position-relative">
+                                    <td></td>
+                                    <td class="text-center">현재 기술 초월 레벨</td>
+                                    <td class="text-center">문스톤 비용</td>
+                                    <td class="text-center">1문스톤당 피해량</td>
+                                </tr>
+                                <form id="skill-frm" method="post">
+                                    <tr th:each="skill : ${skills}">
+                                        <td class="d-flex align-items-center border-end-0" th:id="${skill.name + '_5'}">
+                                            <img alt="" class="pe-1" src="" th:alt="${skill.name}"
+                                                 th:src="${skill.imageUrl}"/>
+                                            <input th:name="${'userSkillList[' + skillStat.index + '].name'}"
+                                                   th:text="${skill.description}" th:value="${skill.name}"
+                                                   type="hidden">
+                                        </td>
+                                        <td class="bg-t-yellow">
+                                            <input class="form-control skill" oninput="onlyNumberAndComma(this)"
+                                                   th:critical="${skill.critical == null ? '0' : skill.critical}"
+                                                   th:hyperCritical="${#strings.defaultString(skill.hyperCritical, '0')}"
+                                                   th:id="${skill.name + '_1'}"
+                                                   th:level="${skill.skillOrder}"
+                                                   th:name="${'userSkillList[' + skillStat.index + '].point'}"
+                                                   th:skill="${#strings.defaultString(skill.skill, '0')}"
+                                                   th:skillName="${#strings.defaultString(skill.name, '')}"
+                                                   th:superCritical="${#strings.defaultString(skill.superCritical, '0')}"
+                                                   th:superSkill="${#strings.defaultString(skill.superSkill, '0')}"
+                                                   th:value="${skill.point == null ? '0' : skill.point}"
+                                                   type="text">
+                                        </td>
+                                        <td th:id="${skill.name + '_2'}" th:text="${skill.moonstonesNeeded}"></td>
+                                        <td th:id="${skill.name + '_3'}"></td>
+                                        <input th:id="${skill.name + '_4'}" type="hidden">
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: #de9d9b">계산을 원하는 스킬은 레벨 7로 설정하세요.</td>
+                                        <td class="bg-t-mango text-center fw-bold">업그레이드 추천 :</td>
+                                        <td class="text-center fw-bold" colspan="2" id="skill-upgrade-first">
+                                        </td>
+                                    </tr>
+                                </form>
+                                </tbody>
+                            </table>
                             <!-- End Primary Color Bordered Table -->
                         </div>
                     </div>
