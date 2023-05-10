@@ -55,33 +55,41 @@
                                         </td>
                                         <td class="bg-t-yellow">
                                             <input class="form-control natural-number"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumberAndComma(this)"
                                                    th:id="${stat.name + '_1'}"
                                                    th:if="${stat.statType.equals('DEF')}"
                                                    th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:tabindex="${'def_' + (2 * statStat.count - 1)}"
                                                    th:value="${stat.point == null ? '1,000' : stat.point}"
                                                    type="text">
                                             <input class="form-control percent"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumber(this)"
                                                    th:id="${stat.name + '_1'}"
                                                    th:if="${!stat.statType.equals('DEF')}"
                                                    th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:tabindex="${'def_' + (2 * statStat.count - 1)}"
                                                    th:value="${stat.point == null ? '100%' : stat.point}"
                                                    type="text">
                                         </td>
                                         <td class="bg-t-yellow">
                                             <input class="form-control natural-number"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumberAndComma(this)"
                                                    th:id="${stat.name + '_2'}"
                                                    th:if="${stat.statType.equals('DEF')}"
                                                    th:name="${'userStatList[' + statStat.index + '].changeRate'}"
-                                                   value="0">
+                                                   th:tabindex="${'def_' + (2 * statStat.count)}"
+                                                   type="text" value="0">
                                             <input class="form-control percent"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumber(this)"
                                                    th:id="${stat.name + '_2'}"
                                                    th:if="${!stat.statType.equals('DEF')}"
                                                    th:name="${'userStatList[' + statStat.index + '].changeRate'}"
-                                                   value="0%">
+                                                   th:tabindex="${'def_' + (2 * statStat.count)}"
+                                                   type="text" value="0%">
                                         </td>
                                         <td th:id="${stat.name + '_3'}"
                                             th:text="${stat.point == null ? (stat.statType == 'DEF_PERCENT' ? '100%' : '1,000') : stat.point}"></td>

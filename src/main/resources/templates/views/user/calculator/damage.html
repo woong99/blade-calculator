@@ -85,46 +85,58 @@
                                         </td>
                                         <td class="bg-t-yellow">
                                             <input class="form-control natural-number"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumberAndComma(this)"
                                                    th:id="${stat.name + '_1'}"
                                                    th:if="${stat.statType.equals('ATK')}"
                                                    th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:tabindex="${'atk_' + (2 * statStat.count - 1)}"
                                                    th:value="${stat.point == null ? '1,000' : stat.point}"
                                                    type="text">
                                             <input class="form-control percent"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumber(this)"
                                                    th:id="${stat.name + '_1'}"
                                                    th:if="${stat.statType.equals('ATK_PERCENT')}"
                                                    th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:tabindex="${'atk_' + (2 * statStat.count - 1)}"
                                                    th:value="${stat.point == null ? '100%' : stat.point}"
                                                    type="text">
                                             <input class="form-control critical"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumber(this)"
                                                    th:id="${stat.name + '_1'}"
                                                    th:if="${stat.statType.equals('ATK_CRITICAL')}"
                                                    th:name="${'userStatList[' + statStat.index + '].point'}"
+                                                   th:tabindex="${'atk_' + (2 * statStat.count - 1)}"
                                                    th:value="${stat.point == null ? '100%' : stat.point}"
                                                    type="text">
                                         </td>
                                         <td class="bg-t-yellow">
                                             <input class="form-control natural-number"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumberAndComma(this)"
                                                    th:id="${stat.name + '_2'}"
                                                    th:if="${stat.statType.equals('ATK')}"
                                                    th:name="${'userStatList[' + statStat.index + '].changeRate'}"
-                                                   value="0">
+                                                   th:tabindex="${'atk_' + (2 * statStat.count)}"
+                                                   type="text" value="0">
                                             <input class="form-control percent"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumber(this)"
                                                    th:id="${stat.name + '_2'}"
                                                    th:if="${stat.statType.equals('ATK_PERCENT')}"
                                                    th:name="${'userStatList[' + statStat.index + '].changeRate'}"
-                                                   value="0%">
+                                                   th:tabindex="${'atk_' + (2 * statStat.count)}"
+                                                   type="text" value="0%">
                                             <input class="form-control critical"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumber(this)"
                                                    th:id="${stat.name + '_2'}"
                                                    th:if="${stat.statType.equals('ATK_CRITICAL')}"
                                                    th:name="${'userStatList[' + statStat.index + '].changeRate'}"
-                                                   value="0%">
+                                                   th:tabindex="${'atk_' + (2 * statStat.count)}"
+                                                   type="text" value="0%">
                                         </td>
                                         <td th:id="${stat.name + '_3'}"
                                             th:text="${stat.point == null ? (stat.statType == 'ATK_PERCENT' || stat.statType == 'ATK_CRITICAL' ? '100%' : '1,000') : stat.point}"></td>
@@ -168,11 +180,13 @@
                                         </td>
                                         <td class="bg-t-yellow">
                                             <input class="form-control growth"
+                                                   onfocus="this.select()"
                                                    oninput="onlyNumberAndComma(this)"
+                                                   th:dataType="${growth.dataMiningType}"
                                                    th:id="${growth.name + '_1'}"
                                                    th:name="${'userGrowthList[' + growthStat.index + '].point'}"
                                                    th:p="${growth.valueIncrease}"
-                                                   th:type="${growth.dataMiningType}"
+                                                   th:tabindex="${'growth_' + growthStat.count}"
                                                    th:value="${growth.point == null ? '0' : growth.point}"
                                                    type="text">
                                         </td>
@@ -229,7 +243,8 @@
                                                    type="hidden">
                                         </td>
                                         <td class="bg-t-yellow">
-                                            <input class="form-control skill" oninput="onlyNumberAndComma(this)"
+                                            <input class="form-control skill" onfocus="this.select()"
+                                                   oninput="onlyNumberAndComma(this)"
                                                    th:critical="${skill.critical == null ? '0' : skill.critical}"
                                                    th:hyperCritical="${#strings.defaultString(skill.hyperCritical, '0')}"
                                                    th:id="${skill.name + '_1'}"
@@ -239,6 +254,7 @@
                                                    th:skillName="${#strings.defaultString(skill.name, '')}"
                                                    th:superCritical="${#strings.defaultString(skill.superCritical, '0')}"
                                                    th:superSkill="${#strings.defaultString(skill.superSkill, '0')}"
+                                                   th:tabindex="${'skill_' + skillStat.count}"
                                                    th:value="${skill.point == null ? '0' : skill.point}"
                                                    type="text">
                                         </td>

@@ -7,7 +7,7 @@ $(function () {
     /* 성장 계산 */
     $(".growth").each((index, item) => {
         const p = $(item).attr("p");
-        const type = $(item).attr("type");
+        const type = $(item).attr("datatype");
         const level = parseInt($(item).val().replaceAll(",", ""));
         const upgradeCost = $("#" + $(item).attr("id").split("_")[0] + "_2");
         if (type === 'ATK') {
@@ -137,7 +137,7 @@ $(function () {
         const firstInput = $("#" + $(this).attr("id").split("_")[0] + "_1");
         const upgradeCost = $("#" + $(this).attr("id").split("_")[0] + "_2");
         const firstInputVal = parseInt(firstInput.val().replaceAll(",", ""));
-        const type = $(this).attr("type")
+        const type = $(this).attr("datatype")
         const point = (firstInputVal + 1).toLocaleString();
 
         if (type === 'ATK') {
